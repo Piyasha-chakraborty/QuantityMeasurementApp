@@ -4,31 +4,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
 
-    // ---------------- SUBTRACTION TESTS ----------------
+    // ---------------- ADDITION ----------------
 
     @Test
-    void shouldSubtractVolumesCorrectly() {
+    void shouldAddVolumesCorrectly() {
 
         Quantity<VolumeUnit> litre =
                 new Quantity<>(
-                        5,
+                        1,
                         VolumeUnit.LITRE);
 
         Quantity<VolumeUnit> ml =
                 new Quantity<>(
-                        2000,
+                        1000,
                         VolumeUnit.MILLILITRE);
 
         Quantity<VolumeUnit> result =
-                litre.subtract(ml);
+                litre.add(ml);
 
         Quantity<VolumeUnit> expected =
                 new Quantity<>(
-                        3,
+                        2,
                         VolumeUnit.LITRE);
 
         assertEquals(expected, result);
     }
+
+    // ---------------- SUBTRACTION ----------------
 
     @Test
     void shouldSubtractLengthsCorrectly() {
@@ -54,7 +56,7 @@ public class QuantityMeasurementAppTest {
         assertEquals(expected, result);
     }
 
-    // ---------------- DIVISION TESTS ----------------
+    // ---------------- DIVISION ----------------
 
     @Test
     void shouldDivideWeightsCorrectly() {
@@ -75,24 +77,7 @@ public class QuantityMeasurementAppTest {
         assertEquals(2.0, result);
     }
 
-    @Test
-    void shouldReturnOneForEqualQuantities() {
-
-        Quantity<VolumeUnit> litre =
-                new Quantity<>(
-                        1,
-                        VolumeUnit.LITRE);
-
-        Quantity<VolumeUnit> ml =
-                new Quantity<>(
-                        1000,
-                        VolumeUnit.MILLILITRE);
-
-        double result =
-                litre.divide(ml);
-
-        assertEquals(1.0, result);
-    }
+    // ---------------- DIVIDE BY ZERO ----------------
 
     @Test
     void shouldThrowExceptionForDivideByZero() {

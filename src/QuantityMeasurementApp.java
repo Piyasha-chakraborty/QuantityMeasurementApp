@@ -123,11 +123,27 @@ class Quantity<U extends IMeasurable> {
 
     private final U unit;
 
+    // ---------------- OPERATION ENUM ----------------
+
+    private enum ArithmeticOperation {
+
+        ADD,
+        SUBTRACT,
+        DIVIDE
+    }
+
     public Quantity(double value, U unit) {
 
         if (unit == null) {
+
             throw new IllegalArgumentException(
                     "Unit cannot be null");
+        }
+
+        if (!Double.isFinite(value)) {
+
+            throw new IllegalArgumentException(
+                    "Value must be finite");
         }
 
         this.value = value;
@@ -139,55 +155,84 @@ class Quantity<U extends IMeasurable> {
         return unit.convertToBaseUnit(value);
     }
 
-    public Quantity<U> convertTo(U targetUnit) {
+    // ---------------- CENTRALIZED HELPER ----------------
 
-        double baseValue = this.toBaseUnit();
+    private double performOperation(
+            Quantity<U> other,
+            ArithmeticOperation operation) {
 
-        double converted =
-                targetUnit.convertFromBaseUnit(baseValue);
+        if (other == null) {
 
-        converted =
-                Math.round(converted * 100.0) / 100.0;
+            throw new IllegalArgumentException(
+                    "Other quantity cannot be null");
+        }
 
-        return new Quantity<>(converted, targetUnit);
+        if (this.unit.getClass()
+                != other.unit.getClass()) {
+
+            throw new IllegalArgumentException(
+                    "Different measurement categories");
+        }
+
+        double thisBase =
+                this.toBaseUnit();
+
+        double otherBase =
+                other.toBaseUnit();
+
+        switch (operation) {
+
+            case ADD:
+                return thisBase + otherBase;
+
+            case SUBTRACT:
+                return thisBase - otherBase;
+
+            case DIVIDE:
+
+                if (otherBase == 0) {
+
+                    throw new ArithmeticException(
+                            "Cannot divide by zero");
+                }
+
+                return thisBase / otherBase;
+
+            default:
+                throw new IllegalArgumentException(
+                        "Invalid operation");
+        }
     }
 
-    public Quantity<U> add(Quantity<U> other) {
+    // ---------------- ADDITION ----------------
 
-        double total =
-                this.toBaseUnit()
-                        + other.toBaseUnit();
-
-        double converted =
-                this.unit.convertFromBaseUnit(total);
-
-        return new Quantity<>(converted, this.unit);
-    }
-
-    // ---------------- SUBTRACTION ----------------
-
-    public Quantity<U> subtract(Quantity<U> other) {
+    public Quantity<U> add(
+            Quantity<U> other) {
 
         double result =
-                this.toBaseUnit()
-                        - other.toBaseUnit();
+                performOperation(
+                        other,
+                        ArithmeticOperation.ADD);
 
         double converted =
-                this.unit.convertFromBaseUnit(result);
+                unit.convertFromBaseUnit(result);
 
         converted =
                 Math.round(converted * 100.0) / 100.0;
 
-        return new Quantity<>(converted, this.unit);
+        return new Quantity<>(
+                converted,
+                unit);
     }
 
-    public Quantity<U> subtract(
+    public Quantity<U> add(
             Quantity<U> other,
             U targetUnit) {
 
         double result =
-                this.toBaseUnit()
-                        - other.toBaseUnit();
+                performOperation(
+                        other,
+                        ArithmeticOperation.ADD);
 
         double converted =
                 targetUnit.convertFromBaseUnit(result);
@@ -195,22 +240,63 @@ class Quantity<U extends IMeasurable> {
         converted =
                 Math.round(converted * 100.0) / 100.0;
 
-        return new Quantity<>(converted, targetUnit);
+        return new Quantity<>(
+                converted,
+                targetUnit);
+    }
+
+    // ---------------- SUBTRACTION ----------------
+
+    public Quantity<U> subtract(
+            Quantity<U> other) {
+
+        double result =
+                performOperation(
+                        other,
+                        ArithmeticOperation.SUBTRACT);
+
+        double converted =
+                unit.convertFromBaseUnit(result);
+
+        converted =
+                Math.round(converted * 100.0) / 100.0;
+
+        return new Quantity<>(
+                converted,
+                unit);
+    }
+
+    public Quantity<U> subtract(
+            Quantity<U> other,
+            U targetUnit) {
+
+        double result =
+                performOperation(
+                        other,
+                        ArithmeticOperation.SUBTRACT);
+
+        double converted =
+                targetUnit.convertFromBaseUnit(result);
+
+        converted =
+                Math.round(converted * 100.0) / 100.0;
+
+        return new Quantity<>(
+                converted,
+                targetUnit);
     }
 
     // ---------------- DIVISION ----------------
 
-    public double divide(Quantity<U> other) {
+    public double divide(
+            Quantity<U> other) {
 
-        if (other.toBaseUnit() == 0) {
-
-            throw new ArithmeticException(
-                    "Cannot divide by zero");
-        }
-
-        return this.toBaseUnit()
-                / other.toBaseUnit();
+        return performOperation(
+                other,
+                ArithmeticOperation.DIVIDE);
     }
+
+    // ---------------- EQUALS ----------------
 
     @Override
     public boolean equals(Object obj) {
@@ -238,13 +324,15 @@ class Quantity<U extends IMeasurable> {
     @Override
     public int hashCode() {
 
-        return Double.hashCode(toBaseUnit());
+        return Double.hashCode(
+                toBaseUnit());
     }
 
     @Override
     public String toString() {
 
-        return value + " " + unit.getUnitName();
+        return value + " "
+                + unit.getUnitName();
     }
 }
 
@@ -254,21 +342,23 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        Quantity<VolumeUnit> litre =
-                new Quantity<>(5,
-                        VolumeUnit.LITRE);
+        Quantity<LengthUnit> feet =
+                new Quantity<>(
+                        10,
+                        LengthUnit.FEET);
 
-        Quantity<VolumeUnit> ml =
-                new Quantity<>(2000,
-                        VolumeUnit.MILLILITRE);
+        Quantity<LengthUnit> inch =
+                new Quantity<>(
+                        6,
+                        LengthUnit.INCH);
 
-        Quantity<VolumeUnit> result =
-                litre.subtract(ml);
+        Quantity<LengthUnit> result =
+                feet.subtract(inch);
 
         System.out.println(result);
 
         double ratio =
-                litre.divide(ml);
+                feet.divide(inch);
 
         System.out.println(ratio);
     }

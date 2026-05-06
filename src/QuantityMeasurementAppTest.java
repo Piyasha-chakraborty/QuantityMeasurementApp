@@ -1,9 +1,10 @@
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
+
+    // ---------------- LENGTH TESTS ----------------
 
     @Test
     void shouldReturnTrueForFeetAndInch() {
@@ -21,59 +22,80 @@ public class QuantityMeasurementAppTest {
         assertEquals(feet, inch);
     }
 
+    // ---------------- WEIGHT TESTS ----------------
+
     @Test
-    void shouldReturnTrueForFeetAndYard() {
+    void shouldReturnTrueForKilogramAndGram() {
 
-        QuantityMeasurementApp feet =
-                new QuantityMeasurementApp(
-                        3,
-                        QuantityMeasurementApp.LengthUnit.FEET);
-
-        QuantityMeasurementApp yard =
+        QuantityMeasurementApp kg =
                 new QuantityMeasurementApp(
                         1,
-                        QuantityMeasurementApp.LengthUnit.YARD);
+                        QuantityMeasurementApp.WeightUnit.KILOGRAM);
 
-        assertEquals(feet, yard);
+        QuantityMeasurementApp gram =
+                new QuantityMeasurementApp(
+                        1000,
+                        QuantityMeasurementApp.WeightUnit.GRAM);
+
+        assertEquals(kg, gram);
     }
 
     @Test
-    void shouldReturnTrueForFeetAndCentimeter() {
+    void shouldReturnTrueForKilogramAndPound() {
 
-        QuantityMeasurementApp feet =
+        QuantityMeasurementApp kg =
                 new QuantityMeasurementApp(
                         1,
-                        QuantityMeasurementApp.LengthUnit.FEET);
+                        QuantityMeasurementApp.WeightUnit.KILOGRAM);
 
-        QuantityMeasurementApp cm =
+        QuantityMeasurementApp pound =
                 new QuantityMeasurementApp(
-                        30.48,
-                        QuantityMeasurementApp.LengthUnit.CENTIMETER);
+                        2.20462,
+                        QuantityMeasurementApp.WeightUnit.POUND);
 
-        assertEquals(feet, cm);
+        assertEquals(
+                kg.toBaseWeightUnit(),
+                pound.toBaseWeightUnit(),
+                0.01);
     }
 
     @Test
-    void shouldAddLengthsCorrectly() {
+    void shouldAddWeightsCorrectly() {
 
-        QuantityMeasurementApp feet =
+        QuantityMeasurementApp kg =
                 new QuantityMeasurementApp(
                         1,
-                        QuantityMeasurementApp.LengthUnit.FEET);
+                        QuantityMeasurementApp.WeightUnit.KILOGRAM);
 
-        QuantityMeasurementApp inch =
+        QuantityMeasurementApp gram =
                 new QuantityMeasurementApp(
-                        12,
-                        QuantityMeasurementApp.LengthUnit.INCH);
+                        1000,
+                        QuantityMeasurementApp.WeightUnit.GRAM);
 
         QuantityMeasurementApp result =
-                feet.add(inch);
+                kg.addWeight(gram);
 
         QuantityMeasurementApp expected =
                 new QuantityMeasurementApp(
                         2,
-                        QuantityMeasurementApp.LengthUnit.FEET);
+                        QuantityMeasurementApp.WeightUnit.KILOGRAM);
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void shouldReturnFalseForLengthAndWeight() {
+
+        QuantityMeasurementApp feet =
+                new QuantityMeasurementApp(
+                        1,
+                        QuantityMeasurementApp.LengthUnit.FEET);
+
+        QuantityMeasurementApp kg =
+                new QuantityMeasurementApp(
+                        1,
+                        QuantityMeasurementApp.WeightUnit.KILOGRAM);
+
+        assertNotEquals(feet, kg);
     }
 }

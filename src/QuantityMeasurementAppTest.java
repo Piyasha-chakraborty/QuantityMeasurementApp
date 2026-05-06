@@ -5,31 +5,39 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QuantityMeasurementAppTest {
 
     @Test
-    void testEquality_SameValue() {
+    void testFeetEquality_SameValue() {
 
-        QuantityMeasurementApp.Feet feet1 =
-                new QuantityMeasurementApp.Feet(1.0);
-
-        QuantityMeasurementApp.Feet feet2 =
-                new QuantityMeasurementApp.Feet(1.0);
-
-        assertEquals(feet1, feet2);
+        assertTrue(
+                QuantityMeasurementApp.checkFeetEquality(1.0, 1.0)
+        );
     }
 
     @Test
-    void testEquality_DifferentValue() {
+    void testFeetEquality_DifferentValue() {
 
-        QuantityMeasurementApp.Feet feet1 =
-                new QuantityMeasurementApp.Feet(1.0);
-
-        QuantityMeasurementApp.Feet feet2 =
-                new QuantityMeasurementApp.Feet(2.0);
-
-        assertNotEquals(feet1, feet2);
+        assertFalse(
+                QuantityMeasurementApp.checkFeetEquality(1.0, 2.0)
+        );
     }
 
     @Test
-    void testEquality_NullComparison() {
+    void testInchesEquality_SameValue() {
+
+        assertTrue(
+                QuantityMeasurementApp.checkInchesEquality(1.0, 1.0)
+        );
+    }
+
+    @Test
+    void testInchesEquality_DifferentValue() {
+
+        assertFalse(
+                QuantityMeasurementApp.checkInchesEquality(1.0, 2.0)
+        );
+    }
+
+    @Test
+    void testFeetEquality_NullComparison() {
 
         QuantityMeasurementApp.Feet feet =
                 new QuantityMeasurementApp.Feet(1.0);
@@ -38,22 +46,29 @@ public class QuantityMeasurementAppTest {
     }
 
     @Test
-    void testEquality_NonNumericInput() {
+    void testInchesEquality_NullComparison() {
 
-        QuantityMeasurementApp.Feet feet =
-                new QuantityMeasurementApp.Feet(1.0);
+        QuantityMeasurementApp.Inches inches =
+                new QuantityMeasurementApp.Inches(1.0);
 
-        String value = "abc";
-
-        assertNotEquals(feet, value);
+        assertNotEquals(null, inches);
     }
 
     @Test
-    void testEquality_SameReference() {
+    void testFeetEquality_SameReference() {
 
         QuantityMeasurementApp.Feet feet =
                 new QuantityMeasurementApp.Feet(1.0);
 
         assertEquals(feet, feet);
+    }
+
+    @Test
+    void testInchesEquality_SameReference() {
+
+        QuantityMeasurementApp.Inches inches =
+                new QuantityMeasurementApp.Inches(1.0);
+
+        assertEquals(inches, inches);
     }
 }

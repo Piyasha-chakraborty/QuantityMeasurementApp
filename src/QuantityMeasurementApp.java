@@ -80,6 +80,41 @@ enum WeightUnit implements IMeasurable {
     }
 }
 
+// ---------------- VOLUME UNIT ----------------
+
+enum VolumeUnit implements IMeasurable {
+
+    LITRE(1.0),
+    MILLILITRE(0.001),
+    GALLON(3.78541);
+
+    private final double conversionFactor;
+
+    VolumeUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
+    }
+
+    @Override
+    public double getConversionFactor() {
+        return conversionFactor;
+    }
+
+    @Override
+    public double convertToBaseUnit(double value) {
+        return value * conversionFactor;
+    }
+
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / conversionFactor;
+    }
+
+    @Override
+    public String getUnitName() {
+        return name();
+    }
+}
+
 // ---------------- GENERIC QUANTITY ----------------
 
 class Quantity<U extends IMeasurable> {
@@ -185,26 +220,15 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        Quantity<LengthUnit> feet =
+        Quantity<VolumeUnit> litre =
                 new Quantity<>(1,
-                        LengthUnit.FEET);
+                        VolumeUnit.LITRE);
 
-        Quantity<LengthUnit> inch =
-                new Quantity<>(12,
-                        LengthUnit.INCH);
-
-        System.out.println(
-                feet.equals(inch));
-
-        Quantity<WeightUnit> kg =
-                new Quantity<>(1,
-                        WeightUnit.KILOGRAM);
-
-        Quantity<WeightUnit> gram =
+        Quantity<VolumeUnit> ml =
                 new Quantity<>(1000,
-                        WeightUnit.GRAM);
+                        VolumeUnit.MILLILITRE);
 
         System.out.println(
-                kg.equals(gram));
+                litre.equals(ml));
     }
 }

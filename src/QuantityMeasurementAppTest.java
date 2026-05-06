@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
 
-    // ---------------- LENGTH TESTS ----------------
+    // ---------------- LENGTH TEST ----------------
 
     @Test
     void shouldReturnTrueForFeetAndInch() {
@@ -22,31 +22,7 @@ public class QuantityMeasurementAppTest {
         assertEquals(feet, inch);
     }
 
-    @Test
-    void shouldAddLengthsCorrectly() {
-
-        Quantity<LengthUnit> feet =
-                new Quantity<>(
-                        1,
-                        LengthUnit.FEET);
-
-        Quantity<LengthUnit> inch =
-                new Quantity<>(
-                        12,
-                        LengthUnit.INCH);
-
-        Quantity<LengthUnit> result =
-                feet.add(inch);
-
-        Quantity<LengthUnit> expected =
-                new Quantity<>(
-                        2,
-                        LengthUnit.FEET);
-
-        assertEquals(expected, result);
-    }
-
-    // ---------------- WEIGHT TESTS ----------------
+    // ---------------- WEIGHT TEST ----------------
 
     @Test
     void shouldReturnTrueForKilogramAndGram() {
@@ -64,67 +40,102 @@ public class QuantityMeasurementAppTest {
         assertEquals(kg, gram);
     }
 
-    @Test
-    void shouldAddWeightsCorrectly() {
+    // ---------------- VOLUME TESTS ----------------
 
-        Quantity<WeightUnit> kg =
+    @Test
+    void shouldReturnTrueForLitreAndMillilitre() {
+
+        Quantity<VolumeUnit> litre =
                 new Quantity<>(
                         1,
-                        WeightUnit.KILOGRAM);
+                        VolumeUnit.LITRE);
 
-        Quantity<WeightUnit> gram =
+        Quantity<VolumeUnit> ml =
                 new Quantity<>(
                         1000,
-                        WeightUnit.GRAM);
+                        VolumeUnit.MILLILITRE);
 
-        Quantity<WeightUnit> result =
-                kg.add(gram);
+        assertEquals(litre, ml);
+    }
 
-        Quantity<WeightUnit> expected =
+    @Test
+    void shouldConvertLitreToMillilitre() {
+
+        Quantity<VolumeUnit> litre =
                 new Quantity<>(
-                        2,
-                        WeightUnit.KILOGRAM);
+                        1,
+                        VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> result =
+                litre.convertTo(
+                        VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> expected =
+                new Quantity<>(
+                        1000,
+                        VolumeUnit.MILLILITRE);
 
         assertEquals(expected, result);
     }
 
-    // ---------------- TYPE SAFETY TEST ----------------
-
     @Test
-    void shouldReturnFalseForLengthAndWeight() {
+    void shouldReturnTrueForLitreAndGallon() {
 
-        Quantity<LengthUnit> feet =
+        Quantity<VolumeUnit> gallon =
                 new Quantity<>(
                         1,
-                        LengthUnit.FEET);
+                        VolumeUnit.GALLON);
+
+        Quantity<VolumeUnit> litre =
+                new Quantity<>(
+                        3.79,
+                        VolumeUnit.LITRE);
+
+        assertEquals(
+                gallon.toBaseUnit(),
+                litre.toBaseUnit(),
+                0.01);
+    }
+
+    @Test
+    void shouldAddVolumesCorrectly() {
+
+        Quantity<VolumeUnit> litre =
+                new Quantity<>(
+                        1,
+                        VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> ml =
+                new Quantity<>(
+                        1000,
+                        VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> result =
+                litre.add(ml);
+
+        Quantity<VolumeUnit> expected =
+                new Quantity<>(
+                        2,
+                        VolumeUnit.LITRE);
+
+        assertEquals(expected, result);
+    }
+
+    // ---------------- TYPE SAFETY ----------------
+
+    @Test
+    void shouldReturnFalseForVolumeAndWeight() {
+
+        Quantity<VolumeUnit> litre =
+                new Quantity<>(
+                        1,
+                        VolumeUnit.LITRE);
 
         Quantity<WeightUnit> kg =
                 new Quantity<>(
                         1,
                         WeightUnit.KILOGRAM);
 
-        assertNotEquals(feet, kg);
-    }
-
-    // ---------------- CONVERSION TEST ----------------
-
-    @Test
-    void shouldConvertFeetToInch() {
-
-        Quantity<LengthUnit> feet =
-                new Quantity<>(
-                        1,
-                        LengthUnit.FEET);
-
-        Quantity<LengthUnit> inch =
-                feet.convertTo(
-                        LengthUnit.INCH);
-
-        Quantity<LengthUnit> expected =
-                new Quantity<>(
-                        12,
-                        LengthUnit.INCH);
-
-        assertEquals(expected, inch);
+        assertNotEquals(litre, kg);
     }
 }

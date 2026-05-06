@@ -32,6 +32,31 @@ public class QuantityMeasurementApp {
             return value * unit.getConversionFactor();
         }
 
+        public static double convert(
+                double value,
+                LengthUnit sourceUnit,
+                LengthUnit targetUnit
+        ) {
+
+            if (!Double.isFinite(value)) {
+                throw new IllegalArgumentException(
+                        "Invalid numeric value"
+                );
+            }
+
+            if (sourceUnit == null || targetUnit == null) {
+                throw new IllegalArgumentException(
+                        "Unit cannot be null"
+                );
+            }
+
+            double valueInFeet =
+                    value * sourceUnit.getConversionFactor();
+
+            return valueInFeet
+                    / targetUnit.getConversionFactor();
+        }
+
         @Override
         public boolean equals(Object obj) {
 
@@ -52,38 +77,40 @@ public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        QuantityLength yard =
-                new QuantityLength(
+        double feetToInches =
+                QuantityLength.convert(
                         1.0,
-                        LengthUnit.YARDS
-                );
-
-        QuantityLength feet =
-                new QuantityLength(
-                        3.0,
-                        LengthUnit.FEET
-                );
-
-        QuantityLength cm =
-                new QuantityLength(
-                        1.0,
-                        LengthUnit.CENTIMETERS
-                );
-
-        QuantityLength inch =
-                new QuantityLength(
-                        0.393701,
+                        LengthUnit.FEET,
                         LengthUnit.INCH
                 );
 
+        double yardsToInches =
+                QuantityLength.convert(
+                        1.0,
+                        LengthUnit.YARDS,
+                        LengthUnit.INCH
+                );
+
+        double cmToFeet =
+                QuantityLength.convert(
+                        30.48,
+                        LengthUnit.CENTIMETERS,
+                        LengthUnit.FEET
+                );
+
         System.out.println(
-                "Yard to Feet Equality: "
-                        + yard.equals(feet)
+                "1 Foot in Inches = "
+                        + feetToInches
         );
 
         System.out.println(
-                "CM to Inch Equality: "
-                        + cm.equals(inch)
+                "1 Yard in Inches = "
+                        + yardsToInches
+        );
+
+        System.out.println(
+                "30.48 CM in Feet = "
+                        + cmToFeet
         );
     }
 }

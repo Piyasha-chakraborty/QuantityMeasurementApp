@@ -79,7 +79,8 @@ public class QuantityMeasurementApp {
         }
 
         public QuantityLength add(
-                QuantityLength other
+                QuantityLength other,
+                LengthUnit targetUnit
         ) {
 
             if (other == null) {
@@ -88,15 +89,22 @@ public class QuantityMeasurementApp {
                 );
             }
 
+            if (targetUnit == null) {
+                throw new IllegalArgumentException(
+                        "Target unit cannot be null"
+                );
+            }
+
             double totalFeet =
                     this.toFeet() + other.toFeet();
 
             double resultValue =
-                    totalFeet / this.unit.getConversionFactor();
+                    totalFeet /
+                            targetUnit.getConversionFactor();
 
             return new QuantityLength(
                     resultValue,
-                    this.unit
+                    targetUnit
             );
         }
 
@@ -109,7 +117,8 @@ public class QuantityMeasurementApp {
             if (obj == null || getClass() != obj.getClass())
                 return false;
 
-            QuantityLength other = (QuantityLength) obj;
+            QuantityLength other =
+                    (QuantityLength) obj;
 
             return Double.compare(
                     this.toFeet(),
@@ -133,7 +142,10 @@ public class QuantityMeasurementApp {
                 );
 
         QuantityLength result =
-                feet.add(inches);
+                feet.add(
+                        inches,
+                        LengthUnit.YARDS
+                );
 
         System.out.println(
                 "Addition Result = "

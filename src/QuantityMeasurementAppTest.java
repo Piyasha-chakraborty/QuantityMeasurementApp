@@ -5,70 +5,116 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QuantityMeasurementAppTest {
 
     @Test
-    void testFeetEquality_SameValue() {
+    void testEquality_FeetToFeet_SameValue() {
 
-        assertTrue(
-                QuantityMeasurementApp.checkFeetEquality(1.0, 1.0)
-        );
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        QuantityMeasurementApp.QuantityLength q2 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        assertEquals(q1, q2);
     }
 
     @Test
-    void testFeetEquality_DifferentValue() {
+    void testEquality_InchToInch_SameValue() {
 
-        assertFalse(
-                QuantityMeasurementApp.checkFeetEquality(1.0, 2.0)
-        );
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.INCH
+                );
+
+        QuantityMeasurementApp.QuantityLength q2 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.INCH
+                );
+
+        assertEquals(q1, q2);
     }
 
     @Test
-    void testInchesEquality_SameValue() {
+    void testEquality_FeetToInch_EquivalentValue() {
 
-        assertTrue(
-                QuantityMeasurementApp.checkInchesEquality(1.0, 1.0)
-        );
+        QuantityMeasurementApp.QuantityLength feet =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        QuantityMeasurementApp.QuantityLength inch =
+                new QuantityMeasurementApp.QuantityLength(
+                        12.0,
+                        QuantityMeasurementApp.LengthUnit.INCH
+                );
+
+        assertEquals(feet, inch);
     }
 
     @Test
-    void testInchesEquality_DifferentValue() {
+    void testEquality_InchToFeet_EquivalentValue() {
 
-        assertFalse(
-                QuantityMeasurementApp.checkInchesEquality(1.0, 2.0)
-        );
+        QuantityMeasurementApp.QuantityLength inch =
+                new QuantityMeasurementApp.QuantityLength(
+                        12.0,
+                        QuantityMeasurementApp.LengthUnit.INCH
+                );
+
+        QuantityMeasurementApp.QuantityLength feet =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        assertEquals(inch, feet);
     }
 
     @Test
-    void testFeetEquality_NullComparison() {
+    void testEquality_FeetToFeet_DifferentValue() {
 
-        QuantityMeasurementApp.Feet feet =
-                new QuantityMeasurementApp.Feet(1.0);
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
 
-        assertNotEquals(null, feet);
+        QuantityMeasurementApp.QuantityLength q2 =
+                new QuantityMeasurementApp.QuantityLength(
+                        2.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
+
+        assertNotEquals(q1, q2);
     }
 
     @Test
-    void testInchesEquality_NullComparison() {
+    void testEquality_SameReference() {
 
-        QuantityMeasurementApp.Inches inches =
-                new QuantityMeasurementApp.Inches(1.0);
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
 
-        assertNotEquals(null, inches);
+        assertEquals(q1, q1);
     }
 
     @Test
-    void testFeetEquality_SameReference() {
+    void testEquality_NullComparison() {
 
-        QuantityMeasurementApp.Feet feet =
-                new QuantityMeasurementApp.Feet(1.0);
+        QuantityMeasurementApp.QuantityLength q1 =
+                new QuantityMeasurementApp.QuantityLength(
+                        1.0,
+                        QuantityMeasurementApp.LengthUnit.FEET
+                );
 
-        assertEquals(feet, feet);
-    }
-
-    @Test
-    void testInchesEquality_SameReference() {
-
-        QuantityMeasurementApp.Inches inches =
-                new QuantityMeasurementApp.Inches(1.0);
-
-        assertEquals(inches, inches);
+        assertNotEquals(null, q1);
     }
 }

@@ -164,18 +164,52 @@ class Quantity<U extends IMeasurable> {
         return new Quantity<>(converted, this.unit);
     }
 
-    public Quantity<U> add(
+    // ---------------- SUBTRACTION ----------------
+
+    public Quantity<U> subtract(Quantity<U> other) {
+
+        double result =
+                this.toBaseUnit()
+                        - other.toBaseUnit();
+
+        double converted =
+                this.unit.convertFromBaseUnit(result);
+
+        converted =
+                Math.round(converted * 100.0) / 100.0;
+
+        return new Quantity<>(converted, this.unit);
+    }
+
+    public Quantity<U> subtract(
             Quantity<U> other,
             U targetUnit) {
 
-        double total =
+        double result =
                 this.toBaseUnit()
-                        + other.toBaseUnit();
+                        - other.toBaseUnit();
 
         double converted =
-                targetUnit.convertFromBaseUnit(total);
+                targetUnit.convertFromBaseUnit(result);
+
+        converted =
+                Math.round(converted * 100.0) / 100.0;
 
         return new Quantity<>(converted, targetUnit);
+    }
+
+    // ---------------- DIVISION ----------------
+
+    public double divide(Quantity<U> other) {
+
+        if (other.toBaseUnit() == 0) {
+
+            throw new ArithmeticException(
+                    "Cannot divide by zero");
+        }
+
+        return this.toBaseUnit()
+                / other.toBaseUnit();
     }
 
     @Override
@@ -221,14 +255,21 @@ public class QuantityMeasurementApp {
     public static void main(String[] args) {
 
         Quantity<VolumeUnit> litre =
-                new Quantity<>(1,
+                new Quantity<>(5,
                         VolumeUnit.LITRE);
 
         Quantity<VolumeUnit> ml =
-                new Quantity<>(1000,
+                new Quantity<>(2000,
                         VolumeUnit.MILLILITRE);
 
-        System.out.println(
-                litre.equals(ml));
+        Quantity<VolumeUnit> result =
+                litre.subtract(ml);
+
+        System.out.println(result);
+
+        double ratio =
+                litre.divide(ml);
+
+        System.out.println(ratio);
     }
 }
